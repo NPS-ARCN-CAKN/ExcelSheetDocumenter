@@ -3,10 +3,12 @@ Imports Microsoft.Office.Interop
 
 Public Class Form1
 
-    Dim MyDataTable As New DataTable
+    'Dim MyDataTable As New DataTable
 
     Private Sub Form1_Load(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
         'GetExcelSheetNames("C:\Work\VitalSigns\ARCN Caribou\Datasets\2015 PLosOne Paper Data\PLOSONE-Data-2012-2013-Diet-Hormone.xlsx")
+
+
     End Sub
 
     Private Function OpenFile() As String
@@ -27,6 +29,8 @@ Public Class Form1
     End Function
 
     Private Sub GetData(ByVal Filename As String)
+        Me.TabControl1.Controls.Clear()
+
         Dim MyConnectionString As String = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & Filename & ";Extended Properties=""Excel 12.0 Xml;HDR=YES"";"
         Dim MyConnection As New OleDbConnection(MyConnectionString)
         MyConnection.Open()
@@ -34,13 +38,38 @@ Public Class Form1
         'get a list of the sheets in the workbook
         Dim SheetsDataTable As DataTable = MyConnection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, Nothing)
         Dim SheetsList As New List(Of String)
-        Dim SheetsDataRow As DataRow
+        'Dim SheetsDataRow As DataRow
         For Each SheetsDataRow In SheetsDataTable.Rows
             SheetsList.Add(SheetsDataRow("TABLE_NAME").ToString())
         Next
+
+        Dim MyDataSet As New DataSet()
+        Dim i As Integer = 0
         For Each Sheet As String In SheetsList
-            'LoadWorksheetObject(Sheet, MyConnection)
-            Debug.Print(Sheet)
+
+            Dim SheetDataTable As New DataTable(Sheet)
+            Dim MyCommand As New OleDbCommand("SELECT * FROM [" & Sheet & "]", MyConnection)
+            Dim MyDataAdapter As New OleDbDataAdapter(MyCommand)
+            Try
+                MyDataAdapter.Fill(SheetDataTable)
+                MyDataSet.Tables.Add(SheetDataTable)
+                'Debug.Print(Sheet & ":" & MyDataSet.Tables(i).TableName & ": " & MyDataTable.Rows.Count)
+                Dim TabPage As New TabPage(Sheet)
+                Dim SheetDataGridView As New DataGridView()
+                With SheetDataGridView
+                    .Name = Sheet
+                    .Dock = DockStyle.Fill
+                    .DataSource = MyDataSet.Tables(i)
+                    .AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells
+                End With
+
+                TabPage.Controls.Add(SheetDataGridView)
+                Me.TabControl1.Controls.Add(TabPage)
+                i = i + 1
+            Catch ex As Exception
+                Debug.Print("Error: " & Sheet & ": " & ex.Message)
+            End Try
+
         Next
 
 
@@ -49,22 +78,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub LoadWorksheetObject(WorksheetName As String, Connection As OleDbConnection)
-        If Not WorksheetName.Trim = "" Then
-            Dim MyCommand As New OleDbCommand("SELECT * FROM [" & WorksheetName & "]", Connection)
-            Dim MyDataAdapter As New OleDbDataAdapter(MyCommand)
-            Dim SheetDataTable As New DataTable(WorksheetName)
-            MyDataAdapter.Fill(MyDataTable)
 
-            Dim Worksheet As New Worksheet
-            Worksheet.DataTable = SheetDataTable
-
-            Debug.Print(WorksheetName & ": " & Worksheet.DataTable.TableName & " Rows: " & MyDataTable.Rows.Count)
-            'MyDataGridView.DataSource = MyDataTable
-        Else
-            MsgBox("No sheets")
-        End If
-    End Sub
 
 
 
