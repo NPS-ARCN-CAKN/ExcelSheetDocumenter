@@ -14,7 +14,7 @@ Public Class Form1
         With OFD
             .AddExtension = True
             .CheckFileExists = True
-            .Filter = "Excel files (*.xls)|*.xls|Excel files(.xlsx)|*.xlsx"
+            .Filter = "Excel  files(.xlsx)|*.xlsx|Excel files (*.xls)|*.xls"
             'Text files (*.txt)|*.txt|All files (*.*)|*.*
             .Multiselect = False
             .Title = "Select an workbook to open"
@@ -38,22 +38,32 @@ Public Class Form1
         For Each SheetsDataRow In SheetsDataTable.Rows
             SheetsList.Add(SheetsDataRow("TABLE_NAME").ToString())
         Next
-        'For Each Sheet As String In SheetsList
-        '    Debug.Print(Sheet)
-        'Next
+        For Each Sheet As String In SheetsList
+            'LoadWorksheetObject(Sheet, MyConnection)
+            Debug.Print(Sheet)
+        Next
 
-        If Not SheetsList(0) Is Nothing Then
-            Dim SheetName As String = SheetsList(0)
-            Dim MyCommand As New OleDbCommand("SELECT * FROM [" & SheetName & "]", MyConnection)
-            Dim MyDataAdapter As New OleDbDataAdapter(MyCommand)
-            MyDataAdapter.Fill(MyDataTable)
-            MyDataGridView.DataSource = MyDataTable
-        Else
-            MsgBox("No sheets")
-        End If
+
 
         MyConnection.Close()
 
+    End Sub
+
+    Private Sub LoadWorksheetObject(WorksheetName As String, Connection As OleDbConnection)
+        If Not WorksheetName.Trim = "" Then
+            Dim MyCommand As New OleDbCommand("SELECT * FROM [" & WorksheetName & "]", Connection)
+            Dim MyDataAdapter As New OleDbDataAdapter(MyCommand)
+            Dim SheetDataTable As New DataTable(WorksheetName)
+            MyDataAdapter.Fill(MyDataTable)
+
+            Dim Worksheet As New Worksheet
+            Worksheet.DataTable = SheetDataTable
+
+            Debug.Print(WorksheetName & ": " & Worksheet.DataTable.TableName & " Rows: " & MyDataTable.Rows.Count)
+            'MyDataGridView.DataSource = MyDataTable
+        Else
+            MsgBox("No sheets")
+        End If
     End Sub
 
 
