@@ -29,9 +29,11 @@ Partial Class MainForm
         Me.ExportToPipeSeparatedValuesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExportToCommaSeparatedValuesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
-        Me.MetadataPanel = New System.Windows.Forms.Panel()
         Me.FilenameTextBox = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
+        Me.CurrentFileTextBox = New System.Windows.Forms.TextBox()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.MetadataPanel = New System.Windows.Forms.Panel()
         Me.MenuStrip1.SuspendLayout()
         Me.MetadataPanel.SuspendLayout()
         Me.SuspendLayout()
@@ -41,7 +43,7 @@ Partial Class MainForm
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.ExportToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(854, 24)
+        Me.MenuStrip1.Size = New System.Drawing.Size(1008, 24)
         Me.MenuStrip1.TabIndex = 1
         Me.MenuStrip1.Text = "MenuStrip1"
         '
@@ -80,45 +82,66 @@ Partial Class MainForm
         'TabControl1
         '
         Me.TabControl1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TabControl1.Location = New System.Drawing.Point(0, 92)
+        Me.TabControl1.Location = New System.Drawing.Point(0, 104)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(854, 451)
+        Me.TabControl1.Size = New System.Drawing.Size(1008, 626)
         Me.TabControl1.TabIndex = 3
-        '
-        'MetadataPanel
-        '
-        Me.MetadataPanel.Controls.Add(Me.Label1)
-        Me.MetadataPanel.Controls.Add(Me.FilenameTextBox)
-        Me.MetadataPanel.Dock = System.Windows.Forms.DockStyle.Top
-        Me.MetadataPanel.Location = New System.Drawing.Point(0, 24)
-        Me.MetadataPanel.Name = "MetadataPanel"
-        Me.MetadataPanel.Size = New System.Drawing.Size(854, 68)
-        Me.MetadataPanel.TabIndex = 4
         '
         'FilenameTextBox
         '
         Me.FilenameTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.FilenameTextBox.Location = New System.Drawing.Point(70, 9)
+        Me.FilenameTextBox.Location = New System.Drawing.Point(97, 38)
         Me.FilenameTextBox.Name = "FilenameTextBox"
-        Me.FilenameTextBox.Size = New System.Drawing.Size(772, 20)
+        Me.FilenameTextBox.Size = New System.Drawing.Size(899, 20)
         Me.FilenameTextBox.TabIndex = 0
         '
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(12, 16)
+        Me.Label1.Location = New System.Drawing.Point(12, 45)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(52, 13)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Filename:"
         '
+        'CurrentFileTextBox
+        '
+        Me.CurrentFileTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.CurrentFileTextBox.Location = New System.Drawing.Point(97, 12)
+        Me.CurrentFileTextBox.Name = "CurrentFileTextBox"
+        Me.CurrentFileTextBox.ReadOnly = True
+        Me.CurrentFileTextBox.Size = New System.Drawing.Size(899, 20)
+        Me.CurrentFileTextBox.TabIndex = 2
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(12, 15)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(60, 13)
+        Me.Label2.TabIndex = 3
+        Me.Label2.Text = "Current file:"
+        '
+        'MetadataPanel
+        '
+        Me.MetadataPanel.Controls.Add(Me.Label2)
+        Me.MetadataPanel.Controls.Add(Me.CurrentFileTextBox)
+        Me.MetadataPanel.Controls.Add(Me.Label1)
+        Me.MetadataPanel.Controls.Add(Me.FilenameTextBox)
+        Me.MetadataPanel.Dock = System.Windows.Forms.DockStyle.Top
+        Me.MetadataPanel.Location = New System.Drawing.Point(0, 24)
+        Me.MetadataPanel.Name = "MetadataPanel"
+        Me.MetadataPanel.Size = New System.Drawing.Size(1008, 80)
+        Me.MetadataPanel.TabIndex = 4
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(854, 543)
+        Me.ClientSize = New System.Drawing.Size(1008, 730)
         Me.Controls.Add(Me.TabControl1)
         Me.Controls.Add(Me.MetadataPanel)
         Me.Controls.Add(Me.MenuStrip1)
@@ -140,8 +163,10 @@ Partial Class MainForm
     Friend WithEvents ExportToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ExportToPipeSeparatedValuesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ExportToCommaSeparatedValuesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents MetadataPanel As System.Windows.Forms.Panel
-    Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents FilenameTextBox As System.Windows.Forms.TextBox
+    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents CurrentFileTextBox As System.Windows.Forms.TextBox
+    Friend WithEvents Label2 As System.Windows.Forms.Label
+    Friend WithEvents MetadataPanel As System.Windows.Forms.Panel
 
 End Class

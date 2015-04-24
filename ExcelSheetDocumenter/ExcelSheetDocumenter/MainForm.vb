@@ -6,7 +6,7 @@ Public Class MainForm
     Dim MyDataset As New DataSet
 
     Private Sub Form1_Load(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
-        'GetExcelSheetNames("C:\Work\VitalSigns\ARCN Caribou\Datasets\2015 PLosOne Paper Data\PLOSONE-Data-2012-2013-Diet-Hormone.xlsx")
+        Me.WindowState = FormWindowState.Maximized
     End Sub
 
     Private Function OpenFile() As String
@@ -30,10 +30,10 @@ Public Class MainForm
     End Function
 
     Private Sub GetData(ByVal Filename As String)
-        Me.TabControl1.Controls.Clear()
-        Me.FilenameTextBox.Text = ""
 
         Try
+            Me.TabControl1.Controls.Clear()
+
             Dim MyConnectionString As String = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & Filename & ";Extended Properties=""Excel 12.0 Xml;HDR=YES"";"
             Dim MyConnection As New OleDbConnection(MyConnectionString)
             MyConnection.Open()
@@ -41,7 +41,7 @@ Public Class MainForm
             'get a list of the sheets in the workbook
             Dim SheetsDataTable As DataTable = MyConnection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, Nothing)
             Dim SheetsList As New List(Of String)
-            'Dim SheetsDataRow As DataRow
+
             For Each SheetsDataRow In SheetsDataTable.Rows
                 SheetsList.Add(SheetsDataRow("TABLE_NAME").ToString())
             Next
@@ -60,6 +60,10 @@ Public Class MainForm
                 Dim WorksheetControl As New WorksheetControl
                 With WorksheetControl
                     .Filename = Me.FilenameTextBox.Text.Trim
+                    '.Creator = Me.CreatorTextBox.Text.Trim
+                    '.PublicationDate = Me.DateTimePicker.Text
+                    '.Publisher = Me.PublisherTextBox.Text.Trim
+                    '.Description = Me.FileDescriptionTextBox.Text.Trim
                     .DataTable = MyDataSet.Tables(i)
                     .Show()
                     .Dock = DockStyle.Fill
@@ -70,41 +74,12 @@ Public Class MainForm
                 i = i + 1
             Next
             MyConnection.Close()
+
         Catch ex As Exception
             MsgBox(ex.Message & " " & System.Reflection.MethodBase.GetCurrentMethod.Name)
         End Try
 
     End Sub
-
-    'Sub DataTable2CSV(ByVal table As DataTable, ByVal filename As String, ByVal sepChar As String)
-    '    Dim writer As System.IO.StreamWriter
-    '    Try
-    '        writer = New System.IO.StreamWriter(filename)
-
-    '        ' first write a line with the columns name
-    '        Dim sep As String = ""
-    '        Dim builder As New System.Text.StringBuilder
-    '        For Each col As DataColumn In table.Columns
-    '            builder.Append(sep).Append(col.ColumnName)
-    '            sep = sepChar
-    '        Next
-    '        writer.WriteLine(builder.ToString())
-
-    '        ' then write all the rows
-    '        For Each row As DataRow In table.Rows
-    '            sep = ""
-    '            builder = New System.Text.StringBuilder
-
-    '            For Each col As DataColumn In table.Columns
-    '                builder.Append(sep).Append(row(col.ColumnName))
-    '                sep = sepChar
-    '            Next
-    '            writer.WriteLine(builder.ToString())
-    '        Next
-    '    Finally
-    '        If Not writer Is Nothing Then writer.Close()
-    '    End Try
-    'End Sub
 
     Private Sub Export(Workbook As String, Delimiter As String)
         If Delimiter.Trim = "" Then Delimiter = "|"
@@ -117,12 +92,23 @@ Public Class MainForm
 
     Private Sub OpenToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles OpenToolStripMenuItem.Click
         Dim Workbook As String = OpenFile()
-        Dim MyFileInfo As New System.IO.FileInfo(Workbook)
-        Me.FilenameTextBox.Text = MyFileInfo.Name
-        GetData(Workbook)
+        If My.Computer.FileSystem.FileExists(Workbook) Then
+            Dim MyFileInfo As New System.IO.FileInfo(Workbook)
+            Me.CurrentFileTextBox.Text = MyFileInfo.FullName
+            Me.FilenameTextBox.Text = MyFileInfo.Name
+            GetData(Workbook)
+        Else
+            MsgBox("The file " & Workbook & " does not exist on the file system")
+            Me.CurrentFileTextBox.Text = ""
+        End If
     End Sub
 
-    Private Sub ExportToPipeSeparatedValuesToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles ExportToPipeSeparatedValuesToolStripMenuItem.Click
 
+    Private Sub RefreshButton_Click(sender As System.Object, e As System.EventArgs)
+        'If My.Computer.FileSystem.FileExists(Me.CurrentFileTextBox.Text.Trim) Then
+        '    GetData(Me.CurrentFileTextBox.Text.Trim)
+        'End If
     End Sub
+
+
 End Class

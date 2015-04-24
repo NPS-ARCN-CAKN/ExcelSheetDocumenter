@@ -10,6 +10,45 @@
         End Set
     End Property
 
+    Private _Creator As String
+    Public Property Creator() As String
+        Get
+            Return _Creator
+        End Get
+        Set(ByVal value As String)
+            _Creator = value
+        End Set
+    End Property
+
+    Private _Publisher As String
+    Public Property Publisher() As String
+        Get
+            Return _Publisher
+        End Get
+        Set(ByVal value As String)
+            _Publisher = value
+        End Set
+    End Property
+
+    Private _PublicationDate As String
+    Public Property PublicationDate() As String
+        Get
+            Return _PublicationDate
+        End Get
+        Set(ByVal value As String)
+            _PublicationDate = value
+        End Set
+    End Property
+
+    Private _Description As String
+    Public Property Description() As String
+        Get
+            Return _Description
+        End Get
+        Set(ByVal value As String)
+            _Description = value
+        End Set
+    End Property
 
     Private _DataTable
     Public Property DataTable() As DataTable
@@ -18,25 +57,7 @@
         End Get
         Set(ByVal value As DataTable)
             _DataTable = value
-
-            'set the control's datagridview to the new datatable
-            Me.DataDataGridView.DataSource = _DataTable
-
-            'load metadata about the datasource into a metadata datatable
-            Dim MetadataDataTable As DataTable = GetMetadataDataTable()
-            Dim DT As DataTable = value.Clone
-            For Each Column As DataColumn In DT.Columns
-                Dim NewRow As DataRow = MetadataDataTable.NewRow
-                NewRow.Item(0) = Column.ColumnName
-                NewRow.Item(1) = Column.DataType.ToString.Replace("System.", "")
-                MetadataDataTable.Rows.Add(NewRow)
-            Next
-            Me.MetadataDataTable = MetadataDataTable
-
-            'fill the metadata datagridview
-            Me.MetadataDataGridView.DataSource = Me.MetadataDataTable
-
-            Me.CSVTextBox.Text = GetJSON(Me.Filename, Me.DataTable, Me.MetadataDataTable) 'GetCSV(me.datatable, MetadataDataTable)
+            RefreshControls()
         End Set
     End Property
 
@@ -80,42 +101,43 @@
     End Function
 
     Private Function GetJSON(Filename As String, DataTable As DataTable, MetadataDataTable As DataTable) As String
+        
         Dim JSON As String = ""
         JSON = JSON & "{" & vbNewLine
-        JSON = JSON & vbTab & " ""filename"": """ & Filename & """," & vbNewLine
-        JSON = JSON & vbTab & " ""creator"": """"," & vbNewLine
-        JSON = JSON & vbTab & " ""publisher"": """"," & vbNewLine
-        JSON = JSON & vbTab & " ""date published"": """"," & vbNewLine
-        JSON = JSON & vbTab & " ""file_description"": """"," & vbNewLine
+        JSON = JSON & vbTab & " ""filename"": """ & Me.Filename & """," & vbNewLine
+        JSON = JSON & vbTab & " ""creator"": """ & Me.Creator & """," & vbNewLine
+        JSON = JSON & vbTab & " ""publisher"": """ & Me.Publisher & """," & vbNewLine
+        JSON = JSON & vbTab & " ""publication_date"": """ & Me.PublicationDate & """," & vbNewLine
+        JSON = JSON & vbTab & " ""file_description"": """ & Me.Description & """," & vbNewLine
         JSON = JSON & vbTab & " ""columns"": [" & vbNewLine
 
         'output the columns metadata
         Dim i As Integer = 1
         For Each Row As DataRow In MetadataDataTable.Rows
             Dim ColumnName As String = ""
-            If Not IsDBNull(Row.Item(0)) Then
-                ColumnName = Row.Item(0).ToString
+            If Not IsDBNull(Row.Item("ColumnName")) Then
+                ColumnName = Row.Item("ColumnName").ToString
             Else
                 ColumnName = ""
             End If
 
             Dim DataType As String = ""
-            If Not IsDBNull(Row.Item(1)) Then
-                DataType = Row.Item(1).ToString
+            If Not IsDBNull(Row.Item("DataType")) Then
+                DataType = Row.Item("DataType").ToString
             Else
                 DataType = ""
             End If
 
-            Dim Unit As String = ""
-            If Not IsDBNull(Row.Item(2)) Then
-                Unit = Row.Item(2).ToString
+            Dim Units As String = ""
+            If Not IsDBNull(Row.Item("Units")) Then
+                Units = Row.Item("Units").ToString
             Else
-                Unit = ""
+                Units = ""
             End If
 
             Dim Description As String = ""
-            If Not IsDBNull(Row.Item(3)) Then
-                Description = Row.Item(3).ToString
+            If Not IsDBNull(Row.Item("Description")) Then
+                Description = Row.Item("Description").ToString
             Else
                 Description = ""
             End If
@@ -123,7 +145,7 @@
             JSON = JSON & vbTab & vbTab & vbTab & vbTab & "{" & vbNewLine
             JSON = JSON & vbTab & vbTab & vbTab & vbTab & vbTab & " ""columnname"": """ & ColumnName & """," & vbNewLine
             JSON = JSON & vbTab & vbTab & vbTab & vbTab & vbTab & " ""datatype"": """ & DataType & """," & vbNewLine
-            JSON = JSON & vbTab & vbTab & vbTab & vbTab & vbTab & " ""unit"": """ & Unit & """," & vbNewLine
+            JSON = JSON & vbTab & vbTab & vbTab & vbTab & vbTab & " ""units"": """ & Units & """," & vbNewLine
             JSON = JSON & vbTab & vbTab & vbTab & vbTab & vbTab & " ""description"": """ & Description & """" & vbNewLine
             JSON = JSON & vbTab & vbTab & vbTab & vbTab & "}" & vbNewLine
             JSON = JSON & vbTab & vbTab & "  ]" & IIf(i < MetadataDataTable.Rows.Count, ",", "") & vbNewLine
@@ -151,22 +173,86 @@
     Private Function GetMetadataDataTable() As DataTable
         Dim MetadataDataTable As New DataTable("Metadata")
         MetadataDataTable.Columns.Add("ColumnName", System.Type.GetType("System.String"))
-        MetadataDataTable.Columns.Add("DataType", System.Type.GetType("System.String"))
         MetadataDataTable.Columns.Add("Units", System.Type.GetType("System.String"))
         MetadataDataTable.Columns.Add("Description", System.Type.GetType("System.String"))
+        MetadataDataTable.Columns.Add("DataType", System.Type.GetType("System.String"))
+        MetadataDataTable.Columns.Add("AllowDBNull", System.Type.GetType("System.Boolean"))
+        MetadataDataTable.Columns.Add("Caption", System.Type.GetType("System.String"))
+        MetadataDataTable.Columns.Add("DateTimeMode", System.Type.GetType("System.String"))
+        MetadataDataTable.Columns.Add("DefaultValue", System.Type.GetType("System.String"))
+        MetadataDataTable.Columns.Add("MaxLength", System.Type.GetType("System.String"))
+        MetadataDataTable.Columns.Add("Unique", System.Type.GetType("System.String"))
+
         Return MetadataDataTable
     End Function
 
 
 
-    Private Sub UpdateCSV()
-        If Not Me.DataTable Is Nothing Then
-            Me.CSVTextBox.Text = GetCSV(Me.DataTable, Me.MetadataDataTable)
+    Private Sub UpdateExportTextboxes()
+
+        Me.CSVTextBox.Text = GetCSV(Me.DataTable, Me.MetadataDataTable)
+        Me.JSONTextBox.Text = GetJSON(Me.Filename, Me.DataTable, Me.MetadataDataTable)
+    End Sub
+
+    Private Sub MetadataDataGridView_CellEndEdit(sender As System.Object, e As System.Windows.Forms.DataGridViewCellEventArgs) Handles MetadataDataGridView.CellEndEdit
+        UpdateExportTextboxes()
+    End Sub
+
+    Public Sub RefreshControls()
+
+        'set the control's datagridview to the new datatable
+        Me.DataDataGridView.DataSource = _DataTable
+
+        'load metadata about the datasource into a metadata datatable
+        Dim MetadataDataTable As DataTable = GetMetadataDataTable()
+
+        For Each Column As DataColumn In Me.DataTable.Columns
+            Dim NewRow As DataRow = MetadataDataTable.NewRow
+            NewRow.Item("ColumnName") = Column.ColumnName
+            'units - user defined
+            'description - user defined
+            NewRow.Item("DataType") = Column.DataType.ToString.Replace("System.", "")
+            NewRow.Item("AllowDBNull") = Column.AllowDBNull
+            NewRow.Item("Caption") = Column.Caption
+            NewRow.Item("DateTimeMode") = Column.DateTimeMode.ToString
+            NewRow.Item("DefaultValue") = Column.DefaultValue
+            NewRow.Item("MaxLength") = Column.MaxLength
+            NewRow.Item("Unique") = Column.Unique
+            MetadataDataTable.Rows.Add(NewRow)
+        Next
+        Me.MetadataDataTable = MetadataDataTable
+
+        'fill the metadata datagridview
+        Me.MetadataDataGridView.DataSource = Me.MetadataDataTable
+
+        'load the text file formats
+        Me.JSONTextBox.Text = GetJSON(Me.Filename, Me.DataTable, Me.MetadataDataTable) 'GetCSV(me.datatable, MetadataDataTable)
+        Me.CSVTextBox.Text = GetCSV(Me.DataTable, Me.MetadataDataTable)
+
+        'fill the property grid with the datatable properties
+        Me.WorksheetPropertyGrid.SelectedObject = Me.DataTable
+
+
+    End Sub
+
+    Private Sub ToolStripLabel1_Click(sender As System.Object, e As System.EventArgs) Handles ToolStripLabel1.Click
+        RefreshControls()
+    End Sub
+
+    Private Sub ExportJSONToolStripButton_Click(sender As System.Object, e As System.EventArgs) Handles ExportJSONToolStripButton.Click
+        ExportFile(Me.JSONTextBox.Text.Trim, "json")
+    End Sub
+
+    Private Sub ExportFile(ExportText As String, FileExtension As String)
+        Dim SF As New SaveFileDialog
+        SF.Filter = "Text file |*." & FileExtension.Trim
+        SF.FileName = Me.Filename.Trim & "." & FileExtension.Trim
+        If SF.ShowDialog = Windows.Forms.DialogResult.OK Then
+            My.Computer.FileSystem.WriteAllText(SF.FileName, ExportText, False)
         End If
     End Sub
 
-
-    Private Sub MetadataDataGridView_Validated(sender As System.Object, e As System.EventArgs) Handles MetadataDataGridView.Validated
-        UpdateCSV()
+    Private Sub ExportCSVToolStripButton_Click(sender As System.Object, e As System.EventArgs) Handles ExportCSVToolStripButton.Click
+        ExportFile(Me.JSONTextBox.Text.Trim, "csv")
     End Sub
 End Class
