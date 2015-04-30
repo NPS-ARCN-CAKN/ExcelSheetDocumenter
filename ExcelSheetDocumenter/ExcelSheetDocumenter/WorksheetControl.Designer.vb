@@ -32,10 +32,6 @@ Partial Class WorksheetControl
         Me.CSVTextBox = New System.Windows.Forms.TextBox()
         Me.ToolStrip2 = New System.Windows.Forms.ToolStrip()
         Me.ExportCSVToolStripButton = New System.Windows.Forms.ToolStripButton()
-        Me.JSONTabPage = New System.Windows.Forms.TabPage()
-        Me.JSONTextBox = New System.Windows.Forms.TextBox()
-        Me.ToolStrip3 = New System.Windows.Forms.ToolStrip()
-        Me.ExportJSONToolStripButton = New System.Windows.Forms.ToolStripButton()
         Me.WorksheetPropertiesTabPage = New System.Windows.Forms.TabPage()
         Me.WorksheetPropertyGrid = New System.Windows.Forms.PropertyGrid()
         Me.DataPackageTabPage = New System.Windows.Forms.TabPage()
@@ -44,6 +40,11 @@ Partial Class WorksheetControl
         Me.ExportDataPackageToolStripButton = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.DataPackageToolStripLabel = New System.Windows.Forms.ToolStripLabel()
+        Me.CopyToClipBoardToolStripButton = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
+        Me.RefreshDataPackageToolStripButton = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
+        Me.RefreshCSVToolStripButton = New System.Windows.Forms.ToolStripButton()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
@@ -54,8 +55,6 @@ Partial Class WorksheetControl
         CType(Me.DataDataGridView, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.CSVTabPage.SuspendLayout()
         Me.ToolStrip2.SuspendLayout()
-        Me.JSONTabPage.SuspendLayout()
-        Me.ToolStrip3.SuspendLayout()
         Me.WorksheetPropertiesTabPage.SuspendLayout()
         Me.DataPackageTabPage.SuspendLayout()
         Me.ToolStrip4.SuspendLayout()
@@ -90,9 +89,8 @@ Partial Class WorksheetControl
         'TabControl1
         '
         Me.TabControl1.Controls.Add(Me.DataTabPage)
-        Me.TabControl1.Controls.Add(Me.CSVTabPage)
         Me.TabControl1.Controls.Add(Me.DataPackageTabPage)
-        Me.TabControl1.Controls.Add(Me.JSONTabPage)
+        Me.TabControl1.Controls.Add(Me.CSVTabPage)
         Me.TabControl1.Controls.Add(Me.WorksheetPropertiesTabPage)
         Me.TabControl1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TabControl1.Location = New System.Drawing.Point(0, 0)
@@ -147,7 +145,7 @@ Partial Class WorksheetControl
         '
         'ToolStrip2
         '
-        Me.ToolStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExportCSVToolStripButton})
+        Me.ToolStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExportCSVToolStripButton, Me.RefreshCSVToolStripButton})
         Me.ToolStrip2.Location = New System.Drawing.Point(3, 3)
         Me.ToolStrip2.Name = "ToolStrip2"
         Me.ToolStrip2.Size = New System.Drawing.Size(736, 25)
@@ -156,54 +154,11 @@ Partial Class WorksheetControl
         '
         'ExportCSVToolStripButton
         '
-        Me.ExportCSVToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
         Me.ExportCSVToolStripButton.Image = CType(resources.GetObject("ExportCSVToolStripButton.Image"), System.Drawing.Image)
         Me.ExportCSVToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ExportCSVToolStripButton.Name = "ExportCSVToolStripButton"
-        Me.ExportCSVToolStripButton.Size = New System.Drawing.Size(53, 22)
+        Me.ExportCSVToolStripButton.Size = New System.Drawing.Size(69, 22)
         Me.ExportCSVToolStripButton.Text = "Export..."
-        '
-        'JSONTabPage
-        '
-        Me.JSONTabPage.Controls.Add(Me.JSONTextBox)
-        Me.JSONTabPage.Controls.Add(Me.ToolStrip3)
-        Me.JSONTabPage.Location = New System.Drawing.Point(4, 22)
-        Me.JSONTabPage.Name = "JSONTabPage"
-        Me.JSONTabPage.Padding = New System.Windows.Forms.Padding(3)
-        Me.JSONTabPage.Size = New System.Drawing.Size(742, 580)
-        Me.JSONTabPage.TabIndex = 3
-        Me.JSONTabPage.Text = "SkeeterJSON"
-        Me.JSONTabPage.UseVisualStyleBackColor = True
-        '
-        'JSONTextBox
-        '
-        Me.JSONTextBox.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.JSONTextBox.Font = New System.Drawing.Font("Courier New", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.JSONTextBox.Location = New System.Drawing.Point(3, 28)
-        Me.JSONTextBox.Multiline = True
-        Me.JSONTextBox.Name = "JSONTextBox"
-        Me.JSONTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both
-        Me.JSONTextBox.Size = New System.Drawing.Size(736, 549)
-        Me.JSONTextBox.TabIndex = 2
-        Me.JSONTextBox.WordWrap = False
-        '
-        'ToolStrip3
-        '
-        Me.ToolStrip3.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExportJSONToolStripButton})
-        Me.ToolStrip3.Location = New System.Drawing.Point(3, 3)
-        Me.ToolStrip3.Name = "ToolStrip3"
-        Me.ToolStrip3.Size = New System.Drawing.Size(736, 25)
-        Me.ToolStrip3.TabIndex = 3
-        Me.ToolStrip3.Text = "ToolStrip3"
-        '
-        'ExportJSONToolStripButton
-        '
-        Me.ExportJSONToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
-        Me.ExportJSONToolStripButton.Image = CType(resources.GetObject("ExportJSONToolStripButton.Image"), System.Drawing.Image)
-        Me.ExportJSONToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ExportJSONToolStripButton.Name = "ExportJSONToolStripButton"
-        Me.ExportJSONToolStripButton.Size = New System.Drawing.Size(53, 22)
-        Me.ExportJSONToolStripButton.Text = "Export..."
         '
         'WorksheetPropertiesTabPage
         '
@@ -250,7 +205,7 @@ Partial Class WorksheetControl
         '
         'ToolStrip4
         '
-        Me.ToolStrip4.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExportDataPackageToolStripButton, Me.ToolStripSeparator1, Me.DataPackageToolStripLabel})
+        Me.ToolStrip4.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RefreshDataPackageToolStripButton, Me.ToolStripSeparator3, Me.ExportDataPackageToolStripButton, Me.ToolStripSeparator1, Me.CopyToClipBoardToolStripButton, Me.ToolStripSeparator2, Me.DataPackageToolStripLabel})
         Me.ToolStrip4.Location = New System.Drawing.Point(3, 3)
         Me.ToolStrip4.Name = "ToolStrip4"
         Me.ToolStrip4.Size = New System.Drawing.Size(736, 25)
@@ -259,11 +214,10 @@ Partial Class WorksheetControl
         '
         'ExportDataPackageToolStripButton
         '
-        Me.ExportDataPackageToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
         Me.ExportDataPackageToolStripButton.Image = CType(resources.GetObject("ExportDataPackageToolStripButton.Image"), System.Drawing.Image)
         Me.ExportDataPackageToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ExportDataPackageToolStripButton.Name = "ExportDataPackageToolStripButton"
-        Me.ExportDataPackageToolStripButton.Size = New System.Drawing.Size(53, 22)
+        Me.ExportDataPackageToolStripButton.Size = New System.Drawing.Size(69, 22)
         Me.ExportDataPackageToolStripButton.Text = "Export..."
         '
         'ToolStripSeparator1
@@ -274,8 +228,42 @@ Partial Class WorksheetControl
         'DataPackageToolStripLabel
         '
         Me.DataPackageToolStripLabel.Name = "DataPackageToolStripLabel"
-        Me.DataPackageToolStripLabel.Size = New System.Drawing.Size(260, 22)
-        Me.DataPackageToolStripLabel.Text = "http://dataprotocols.org/tabular-data-package/"
+        Me.DataPackageToolStripLabel.Size = New System.Drawing.Size(365, 22)
+        Me.DataPackageToolStripLabel.Text = "See http://dataprotocols.org/tabular-data-package/ for information"
+        '
+        'CopyToClipBoardToolStripButton
+        '
+        Me.CopyToClipBoardToolStripButton.Image = CType(resources.GetObject("CopyToClipBoardToolStripButton.Image"), System.Drawing.Image)
+        Me.CopyToClipBoardToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.CopyToClipBoardToolStripButton.Name = "CopyToClipBoardToolStripButton"
+        Me.CopyToClipBoardToolStripButton.Size = New System.Drawing.Size(122, 22)
+        Me.CopyToClipBoardToolStripButton.Text = "Copy to clipboard"
+        '
+        'ToolStripSeparator2
+        '
+        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 25)
+        '
+        'RefreshDataPackageToolStripButton
+        '
+        Me.RefreshDataPackageToolStripButton.Image = CType(resources.GetObject("RefreshDataPackageToolStripButton.Image"), System.Drawing.Image)
+        Me.RefreshDataPackageToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.RefreshDataPackageToolStripButton.Name = "RefreshDataPackageToolStripButton"
+        Me.RefreshDataPackageToolStripButton.Size = New System.Drawing.Size(66, 22)
+        Me.RefreshDataPackageToolStripButton.Text = "Refresh"
+        '
+        'ToolStripSeparator3
+        '
+        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 25)
+        '
+        'RefreshCSVToolStripButton
+        '
+        Me.RefreshCSVToolStripButton.Image = CType(resources.GetObject("RefreshCSVToolStripButton.Image"), System.Drawing.Image)
+        Me.RefreshCSVToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.RefreshCSVToolStripButton.Name = "RefreshCSVToolStripButton"
+        Me.RefreshCSVToolStripButton.Size = New System.Drawing.Size(66, 22)
+        Me.RefreshCSVToolStripButton.Text = "Refresh"
         '
         'WorksheetControl
         '
@@ -296,10 +284,6 @@ Partial Class WorksheetControl
         Me.CSVTabPage.PerformLayout()
         Me.ToolStrip2.ResumeLayout(False)
         Me.ToolStrip2.PerformLayout()
-        Me.JSONTabPage.ResumeLayout(False)
-        Me.JSONTabPage.PerformLayout()
-        Me.ToolStrip3.ResumeLayout(False)
-        Me.ToolStrip3.PerformLayout()
         Me.WorksheetPropertiesTabPage.ResumeLayout(False)
         Me.DataPackageTabPage.ResumeLayout(False)
         Me.DataPackageTabPage.PerformLayout()
@@ -319,15 +303,16 @@ Partial Class WorksheetControl
     Friend WithEvents ExportCSVToolStripButton As System.Windows.Forms.ToolStripButton
     Friend WithEvents WorksheetPropertiesTabPage As System.Windows.Forms.TabPage
     Friend WithEvents WorksheetPropertyGrid As System.Windows.Forms.PropertyGrid
-    Friend WithEvents JSONTabPage As System.Windows.Forms.TabPage
-    Friend WithEvents JSONTextBox As System.Windows.Forms.TextBox
-    Friend WithEvents ToolStrip3 As System.Windows.Forms.ToolStrip
-    Friend WithEvents ExportJSONToolStripButton As System.Windows.Forms.ToolStripButton
     Friend WithEvents DataPackageTabPage As System.Windows.Forms.TabPage
     Friend WithEvents DataPackageTextBox As System.Windows.Forms.TextBox
     Friend WithEvents ToolStrip4 As System.Windows.Forms.ToolStrip
     Friend WithEvents ExportDataPackageToolStripButton As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents DataPackageToolStripLabel As System.Windows.Forms.ToolStripLabel
+    Friend WithEvents CopyToClipBoardToolStripButton As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents RefreshDataPackageToolStripButton As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripSeparator3 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents RefreshCSVToolStripButton As System.Windows.Forms.ToolStripButton
 
 End Class

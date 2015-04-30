@@ -96,6 +96,9 @@
         End Set
     End Property
 
+    Private Property JSONTextBox As Object
+
+
 
     Private Function GetCSV(DataTable As DataTable, MetadataDataTable As DataTable, IncludeColumnsMetadata As Boolean, Delimiter As String, QuoteText As Boolean) As String
         'output columns metadata
@@ -136,16 +139,16 @@
 
         Dim JSON As String = ""
         JSON = JSON & "{" & vbNewLine
-        JSON = JSON & vbTab & """name"": """ & Me.Filename & """," & vbNewLine
+        JSON = JSON & vbTab & """name"": """ & My.Settings.DatasetTitle & """," & vbNewLine
         JSON = JSON & vbTab & """csvddfVersion"": 1.0," & vbNewLine
         JSON = JSON & vbTab & """delimiter"": """ & Delimiter & """," & vbNewLine
         JSON = JSON & vbTab & """doubleQuote"": true," & vbNewLine
-        JSON = JSON & vbTab & """quoteChar"": """"""," & vbNewLine
+        JSON = JSON & vbTab & """quoteChar"": ""\""""," & vbNewLine
         JSON = JSON & vbTab & """skipInitialSpace"": true," & vbNewLine
-        JSON = JSON & vbTab & """header"": true" & vbNewLine
+        JSON = JSON & vbTab & """header"": true," & vbNewLine
         JSON = JSON & vbTab & """resources"": [" & vbNewLine
         JSON = JSON & vbTab & vbTab & "{" & vbNewLine
-        JSON = JSON & vbTab & vbTab & vbTab & """path"": ""data.csv""," & vbNewLine
+        JSON = JSON & vbTab & vbTab & vbTab & """path"": " & Me.Filename & "," & vbNewLine
         JSON = JSON & vbTab & vbTab & vbTab & """schema"": {" & vbNewLine
         JSON = JSON & vbTab & vbTab & vbTab & vbTab & """fields"": [" & vbNewLine
 
@@ -189,12 +192,13 @@
             JSON = JSON & vbTab & vbTab & vbTab & vbTab & vbTab & "]" & IIf(i < MetadataDataTable.Rows.Count, ",", "") & vbNewLine
             i = i + 1
         Next
-
         JSON = JSON & vbTab & vbTab & vbTab & vbTab & "]" & vbNewLine
         JSON = JSON & vbTab & vbTab & vbTab & "}" & vbNewLine
         JSON = JSON & vbTab & vbTab & "}" & vbNewLine
-        JSON = JSON & vbTab & "]" & vbNewLine
+        JSON = JSON & vbTab & "]," & vbNewLine
+        JSON = JSON & GetDataJSON()
         JSON = JSON & "}" & vbNewLine
+
         Return JSON
     End Function
 
@@ -253,20 +257,26 @@
         Next
 
         JSON = JSON & vbTab & " ]," & vbNewLine
+        JSON = JSON & GetDataJSON()
+        JSON = JSON & "}" & vbNewLine
+        Return JSON
+    End Function
+
+    Private Function GetDataJSON() As String
+        Dim JSON As String = vbTab & """format"": ""json"","
         JSON = JSON & vbTab & " ""data"": [" & vbNewLine
-        i = 1
-        For Each Row As DataRow In DataTable.Rows
+        Dim i As Integer = 1
+        For Each Row As DataRow In Me.DataTable.Rows
             JSON = JSON & vbTab & vbTab & "  {" & vbNewLine
             Dim c As Integer = 1
-            For Each Col As DataColumn In DataTable.Columns
-                JSON = JSON & vbTab & vbTab & vbTab & vbTab & """" & Col.ColumnName & """: """ & Row.Item(Col.ColumnName).ToString & """" & IIf(c < DataTable.Columns.Count, ",", "") & vbNewLine
+            For Each Col As DataColumn In Me.DataTable.Columns
+                JSON = JSON & vbTab & vbTab & vbTab & vbTab & """" & Col.ColumnName & """: """ & Row.Item(Col.ColumnName).ToString.Replace("""", "\""") & """" & IIf(c < DataTable.Columns.Count, ",", "") & vbNewLine
                 c = c + 1
             Next
             JSON = JSON & vbTab & vbTab & "  }" & IIf(i < DataTable.Rows.Count, ",", "") & vbNewLine
             i = i + 1
         Next
         JSON = JSON & vbTab & " ]" & vbNewLine
-        JSON = JSON & "}" & vbNewLine
         Return JSON
     End Function
 
@@ -299,7 +309,7 @@
 
     Public Sub RefreshControls()
         'load the text file formats
-        Me.JSONTextBox.Text = GetSkeeterJSON(Me.Filename, Me.DataTable, Me.MetadataDataTable) 'GetCSV(me.datatable, MetadataDataTable)
+        'Me.JSONTextBox.Text = GetSkeeterJSON(Me.Filename, Me.DataTable, Me.MetadataDataTable) 'GetCSV(me.datatable, MetadataDataTable)
         Me.CSVTextBox.Text = GetCSV(Me.DataTable, Me.MetadataDataTable, False, "|", True)
         Me.DataPackageTextBox.Text = GetDataProtocolsDataPackageJSON(Me.Filename, Me.DataTable, Me.MetadataDataTable, "|")
         'fill the property grid with the datatable properties
@@ -310,7 +320,7 @@
         RefreshControls()
     End Sub
 
-    Private Sub ExportJSONToolStripButton_Click(sender As System.Object, e As System.EventArgs) Handles ExportJSONToolStripButton.Click
+    Private Sub ExportJSONToolStripButton_Click(sender As System.Object, e As System.EventArgs)
         ExportFile(Me.JSONTextBox.Text.Trim, "json", False)
     End Sub
 
@@ -344,6 +354,25 @@
     End Sub
 
     Private Sub MetadataDataGridView_CellValueChanged(sender As System.Object, e As System.Windows.Forms.DataGridViewCellEventArgs) Handles MetadataDataGridView.CellValueChanged
+        RefreshControls()
+    End Sub
+
+    Private Sub CopyToClipBoardToolStripButton_Click(sender As System.Object, e As System.EventArgs) Handles CopyToClipBoardToolStripButton.Click
+        ' Determine if any text is selected in the TextBox control. 
+        If Me.DataPackageTextBox.SelectionLength = 0 Then
+            ' Select all text in the text box.
+            Me.DataPackageTextBox.SelectAll()
+        End If
+        ' Copy the contents of the control to the Clipboard.
+        Me.DataPackageTextBox.Copy()
+        MsgBox("Text copied to clipboard")
+    End Sub
+
+    Private Sub RefreshDataPackageToolStripButton_Click(sender As System.Object, e As System.EventArgs) Handles RefreshDataPackageToolStripButton.Click
+        Me.RefreshControls()
+    End Sub
+
+    Private Sub RefreshCSVToolStripButton_Click(sender As System.Object, e As System.EventArgs) Handles RefreshCSVToolStripButton.Click
         RefreshControls()
     End Sub
 End Class

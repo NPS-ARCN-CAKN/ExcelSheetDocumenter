@@ -34,6 +34,8 @@ Partial Class MainForm
         Me.CurrentFileTextBox = New System.Windows.Forms.TextBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.MetadataPanel = New System.Windows.Forms.Panel()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.DatasetTitleTextBox = New System.Windows.Forms.TextBox()
         Me.MenuStrip1.SuspendLayout()
         Me.MetadataPanel.SuspendLayout()
         Me.SuspendLayout()
@@ -82,10 +84,10 @@ Partial Class MainForm
         'TabControl1
         '
         Me.TabControl1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TabControl1.Location = New System.Drawing.Point(0, 104)
+        Me.TabControl1.Location = New System.Drawing.Point(0, 131)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(1008, 626)
+        Me.TabControl1.Size = New System.Drawing.Size(1008, 599)
         Me.TabControl1.TabIndex = 3
         '
         'FilenameTextBox
@@ -94,6 +96,7 @@ Partial Class MainForm
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.FilenameTextBox.Location = New System.Drawing.Point(97, 38)
         Me.FilenameTextBox.Name = "FilenameTextBox"
+        Me.FilenameTextBox.ReadOnly = True
         Me.FilenameTextBox.Size = New System.Drawing.Size(899, 20)
         Me.FilenameTextBox.TabIndex = 0
         '
@@ -127,6 +130,8 @@ Partial Class MainForm
         '
         'MetadataPanel
         '
+        Me.MetadataPanel.Controls.Add(Me.Label3)
+        Me.MetadataPanel.Controls.Add(Me.DatasetTitleTextBox)
         Me.MetadataPanel.Controls.Add(Me.Label2)
         Me.MetadataPanel.Controls.Add(Me.CurrentFileTextBox)
         Me.MetadataPanel.Controls.Add(Me.Label1)
@@ -134,8 +139,26 @@ Partial Class MainForm
         Me.MetadataPanel.Dock = System.Windows.Forms.DockStyle.Top
         Me.MetadataPanel.Location = New System.Drawing.Point(0, 24)
         Me.MetadataPanel.Name = "MetadataPanel"
-        Me.MetadataPanel.Size = New System.Drawing.Size(1008, 80)
+        Me.MetadataPanel.Size = New System.Drawing.Size(1008, 107)
         Me.MetadataPanel.TabIndex = 4
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(12, 71)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(66, 13)
+        Me.Label3.TabIndex = 5
+        Me.Label3.Text = "Dataset title;"
+        '
+        'DatasetTitleTextBox
+        '
+        Me.DatasetTitleTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.DatasetTitleTextBox.Location = New System.Drawing.Point(97, 64)
+        Me.DatasetTitleTextBox.Name = "DatasetTitleTextBox"
+        Me.DatasetTitleTextBox.Size = New System.Drawing.Size(899, 20)
+        Me.DatasetTitleTextBox.TabIndex = 4
         '
         'MainForm
         '
@@ -168,5 +191,7 @@ Partial Class MainForm
     Friend WithEvents CurrentFileTextBox As System.Windows.Forms.TextBox
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents MetadataPanel As System.Windows.Forms.Panel
+    Friend WithEvents Label3 As System.Windows.Forms.Label
+    Friend WithEvents DatasetTitleTextBox As System.Windows.Forms.TextBox
 
 End Class

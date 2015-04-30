@@ -8,3 +8,4 @@ C:\Work\Code\ExcelSheetDocumenter\ExcelSheetDocumenter\ExcelSheetDocumenter\Exce
 C:\Work\Code\ExcelSheetDocumenter\ExcelSheetDocumenter\ExcelSheetDocumenter\ExcelSheetDocumenter\obj\x86\Debug\ExcelSheetDocumenter.pdb
 C:\Work\Code\ExcelSheetDocumenter\ExcelSheetDocumenter\ExcelSheetDocumenter\ExcelSheetDocumenter\obj\x86\Debug\ExcelSheetDocumenter.MainForm.resources
 C:\Work\Code\ExcelSheetDocumenter\ExcelSheetDocumenter\ExcelSheetDocumenter\ExcelSheetDocumenter\obj\x86\Debug\ExcelSheetDocumenter.WorksheetControl.resources
+C:\Work\Code\ExcelSheetDocumenter\ExcelSheetDocumenter\ExcelSheetDocumenter\ExcelSheetDocumenter\bin\Debug\ExcelSheetDocumenter.exe.config
